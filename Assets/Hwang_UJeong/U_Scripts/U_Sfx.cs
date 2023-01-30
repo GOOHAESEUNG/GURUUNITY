@@ -1,4 +1,4 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +10,13 @@ public class U_Sfx : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        audioClip = Resources.Load<AudioClip>("Apple"); // Resources 폴더 안의 "Apple"효과음을 audioClip 변수에 저장
+        audioClip = Resources.Load<AudioClip>("Apple") as AudioClip; // Resources 폴더 안의 "Apple"효과음을 audioClip 변수에 저장
     }
+   
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-}*/
+    
+}

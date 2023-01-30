@@ -1,4 +1,4 @@
-/*using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,36 +44,70 @@ public class U_PlayerMovement : MonoBehaviour
 
     [SerializeField]
     AudioSource feetSteps;
+
     [SerializeField]
-    AudioSource shoot;
+    AudioClip Apple;
+    //[SerializeField]
+    //AudioSource shoot;
 
     [SerializeField]
     private Transform deathZone;
 
     public string targetObjectName;
-    //public string targetObjectName;//¸ñÇ¥ ¿ÀºêÁ§Æ® ÀÌ¸§Àº ÀÎ½ºÆåÅÍ¿¡¼­ ÁöÁ¤->FinalLine
+    GameObject smObject;
+    U_ScoreManager sm;
 
+    GameObject gmObject;
+    U_GameManager gm;
+    //public string targetObjectName;//ëª©í‘œ ì˜¤ë¸Œì íŠ¸ ì´ë¦„ì€ ì¸ìŠ¤í™í„°ì—ì„œ ì§€ì •
     void Start()
     {
         Time.timeScale = 1;
-    }
-    private void OnCollisionEnter(Collision collision)//apple 20°³ ´Ù ¸ğÀ¸°í FinishLine¿¡ ´êÀ¸¸é ¿òÁ÷ÀÓ ¸ØÃã
-    {
-        GameObject smObject = GameObject.Find("ScoreManager");
-        ScoreManager sm = smObject.GetComponent<ScoreManager>();
+        smObject = GameObject.Find("ScoreManager");
+        sm = smObject.GetComponent<U_ScoreManager>();
 
-        if (collision.gameObject.name == targetObjectName && sm.appleAmount == 20)
+        gmObject = GameObject.Find("GameManager");
+        gm = gmObject.GetComponent<U_GameManager>();
+
+    }
+    private void OnCollisionEnter(Collision collision)//ì‚¬ê³¼ 20ê°œ ë‹¤ ëª¨ìœ¼ê³  FinishLineì— ë‹¿ìœ¼ë©´ ì›€ì§ì„ ë©ˆì¶¤
+    {
+       smObject = GameObject.Find("ScoreManager");
+        sm = smObject.GetComponent<U_ScoreManager>();
+
+        if (collision.gameObject.name == "Apple")
+        {
+            Debug.Log("ì‚¬ê³¼ì™€ ì¶©ëŒí•¨");
+
+            sm.appleAmount += 1;
+            sm.appleAmountUI.text = "íšë“ ì‚¬ê³¼:" + sm.appleAmount;
+
+            Destroy(collision.gameObject);//ì‚¬ê³¼ì— ë‹¿ìœ¼ë©´ ì‚¬ê³¼ ì‚­ì œ
+
+            feetSteps.PlayOneShot(Apple);//ì‚¬ê³¼ íšë“ ì‹œ íš¨ê³¼ìŒ ë°œìƒ
+        }
+
+        if (collision.gameObject.name == "Apple" && sm.appleAmount == 20) 
         {
             Time.timeScale = 0;
 
-            SceneManager.LoadScene("EndScene"); //¾À ÀÌ¸§ ¼öÁ¤ ÇÊ¿ä
+            SceneManager.LoadScene("U_Clear"); 
 
         }
-    }
 
+
+        
+    }
+   
     // Update is called once per frame
     void Update()
     {
+        
+        if (U_GameManager.gm.gState != U_GameManager.GameState.Run)
+        {
+            return;
+        }
+
         if (isDying)
             return;
 
@@ -137,7 +171,7 @@ public class U_PlayerMovement : MonoBehaviour
 
     private void CheckDeathTime()
     {
-        if (GameManager.headTime && isMoving || GameManager.headTimeFinish)
+        if (U_GameManager.headTime && isMoving || U_GameManager.headTimeFinish)
         {
             if (!isInDeathZone)
                 return;
@@ -145,13 +179,13 @@ public class U_PlayerMovement : MonoBehaviour
             isDying = true;
             anim.SetBool("isDying", true);
             feetSteps.Stop();
-            shoot.Play(0); 
-            SceneManager.LoadScene("EndScene");//game over Ã¢ ¶ç¿ò
-
+            //shoot.Play(0); //+game over ì°½ ë„ì›€
+            SceneManager.LoadScene("U_EndScene");
+            
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+  private void OnTriggerEnter(Collider other)
     {
         isInDeathZone = other.transform == deathZone;
     }
@@ -161,6 +195,5 @@ public class U_PlayerMovement : MonoBehaviour
         if (other.transform == deathZone)
             isInDeathZone = false;
     }
-
-}*/
-
+   
+}

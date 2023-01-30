@@ -9,6 +9,8 @@ public class Talk2 : MonoBehaviour
 
     //public Animator anim;
 
+    public GameObject image;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,14 +43,18 @@ public class Talk2 : MonoBehaviour
             transform.LookAt(other.transform);
             if (Input.GetKeyDown(KeyCode.Q))
             {
+                image.GetComponent<FadeOut>().fadeout();
+                StartCoroutine(nextScene());
                 Debug.Log("collision2");
                 Invoke("nextScene", 0.5f);
             }
         }
     }
 
-    private void nextScene()
+    IEnumerator nextScene()
     {
+        yield return new WaitForSeconds(1f);
+
         Debug.Log("씬 이동 (무궁화 대화)");
         SceneManager.LoadScene("TalkScene2");
     }

@@ -15,6 +15,8 @@ public class DialogueSystem2_TS : MonoBehaviour
 
     public Animator anim;
 
+    public GameObject image;
+
     public void Begin(Dialogue info)
     {
         anim.SetBool("isOpen", true);
@@ -60,14 +62,19 @@ public class DialogueSystem2_TS : MonoBehaviour
 
         txtSentence.text = string.Empty;
 
-        Invoke("nextScene", 0.5f);
+        image.GetComponent<FadeOut>().fadeout();
+        StartCoroutine(nextScene());
+
+        // Invoke("nextScene", 0.5f);
 
         //SceneManager.LoadScene("GameScene");
         // GetComponent<FadeScript>().Fade();
     }
 
-    private void nextScene()
+    IEnumerator nextScene()
     {
+        yield return new WaitForSeconds(1f);
+
         // SceneManager.LoadScene("무궁화 게임 씬");
     }
 }

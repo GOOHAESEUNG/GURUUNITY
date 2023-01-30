@@ -9,6 +9,8 @@ public class Talk : MonoBehaviour
 
     //public Animator anim;
 
+    public GameObject image;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +40,9 @@ public class Talk : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            image.GetComponent<FadeOut>().fadeout();
+            StartCoroutine(nextScene());
+
             Debug.Log("collision2");
             Invoke("nextScene", 0.5f);
         }
@@ -47,8 +52,10 @@ public class Talk : MonoBehaviour
         }
     }
 
-    private void nextScene()
+    IEnumerator nextScene()
     {
+        yield return new WaitForSeconds(1f);
+
         Debug.Log("씬 이동 (돌다리 대화 1)");
         SceneManager.LoadScene("TalkScene1");
     }

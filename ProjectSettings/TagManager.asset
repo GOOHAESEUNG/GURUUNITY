@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - GooMusic
+  - CinemachineTarget
+  - NPC0
   layers:
   - Default
   - TransparentFX

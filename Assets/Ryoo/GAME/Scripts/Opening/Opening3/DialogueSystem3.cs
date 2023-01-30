@@ -17,6 +17,7 @@ public class DialogueSystem3 : MonoBehaviour
 
     public void Begin(Dialogue info)
     {
+
         anim.SetBool("isOpen", true);
 
         sentences.Clear();

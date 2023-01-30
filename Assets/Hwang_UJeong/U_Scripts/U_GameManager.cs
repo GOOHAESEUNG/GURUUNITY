@@ -106,8 +106,8 @@ public class U_GameManager : MonoBehaviour
         }
 
         DisplayTime(timeValue);
-        dollSing.Play();
-        print("dollSing.Play()");
+
+        
     }
 
 
@@ -149,15 +149,25 @@ public class U_GameManager : MonoBehaviour
 
             if (headTime)
             {
-                dollHeadOn.Play(0);
+                if (!dollHeadOn.isPlaying)
+                {
+                    dollHeadOn.Play();
+                    print("dollHeadOn.Play()");
+                }
+
+                if (!dollSing.isPlaying)
+                {
+                    dollSing.Play();
+                    print("dollSing.Play()");
+                }
             }
             else
             {
-                if (!dollSing.isPlaying)
-                    dollHeadOff.Play(0);
-
-                //if (!dollSing.isPlaying)
-                //    dollSing.PlayDelayed(1);
+                if (!dollHeadOff.isPlaying)
+                {
+                    dollHeadOff.Play();
+                    print("dollHeadOff.Play()");
+                }
             }
         }
 

@@ -15,8 +15,11 @@ public class DialogueSystem3 : MonoBehaviour
 
     public Animator anim;
 
+    public GameObject image;
+
     public void Begin(Dialogue info)
     {
+
         anim.SetBool("isOpen", true);
 
         sentences.Clear();
@@ -60,14 +63,18 @@ public class DialogueSystem3 : MonoBehaviour
 
         txtSentence.text = string.Empty;
 
-        Invoke("nextScene", 0.5f);
+        image.GetComponent<FadeOut>().fadeout();
+        StartCoroutine(nextScene());
+
+        // Invoke("nextScene", 0.5f);
 
         //SceneManager.LoadScene("GameScene");
         // GetComponent<FadeScript>().Fade();
     }
 
-    private void nextScene()
+    IEnumerator nextScene()
     {
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("GameScene");
     }
 }

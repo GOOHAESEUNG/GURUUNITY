@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +33,16 @@ public class U_GameManager : MonoBehaviour
     public static bool headTime;
     public static bool headTimeFinish;
 
+    public enum GameState
+    {
+        Ready,
+        Run
+    }
+    public GameState gState;
+    public GameObject gameLabel;
+    Text gameText;
+
+
     private void Awake()
     {
         if (gm == null)
@@ -44,14 +54,43 @@ public class U_GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gState = GameState.Ready;
+        gameText = gameLabel.GetComponent<Text>();
+        gameText.text = "3..";
+        StartCoroutine(ReadyToStart());
+
+
         headTime = false;
-        timeValue = minutes * 60;
+        timeValue = minutes * 120;
+
+    }
+    IEnumerator ReadyToStart()
+    {
+        yield return new WaitForSeconds(1f);
+
+        gameText.text = "2..";
+
+        yield return new WaitForSeconds(1f);
+        gameText.text = "1..";
+
+        yield return new WaitForSeconds(1f);
+        gameText.text = "ì‹œì‘!";
+
+        yield return new WaitForSeconds(1f);
+        gameLabel.SetActive(false);
+
+        gState = GameState.Run;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (gState != U_GameManager.GameState.Run)
+        {
+            return;
+        }
         CountDown();
+
     }
 
     private void CountDown()
@@ -63,11 +102,14 @@ public class U_GameManager : MonoBehaviour
         else
         {
             timeValue = 0;
-            SceneManager.LoadScene("EndScene");
+            SceneManager.LoadScene("U_TimeOut");
         }
 
         DisplayTime(timeValue);
+
+        
     }
+
 
     private void DisplayTime(float timeToDisplay)
     {
@@ -76,6 +118,7 @@ public class U_GameManager : MonoBehaviour
 
         float mins = Mathf.FloorToInt(timeToDisplay / 60);
         float secs = Mathf.FloorToInt(timeToDisplay % 60);
+        //Debug.Log("ë””ìŠ¤í”Œë ˆì´");
         HeadTime(secs);
 
         timeText.text = string.Format("{0:00}:{1:00}", mins, secs);
@@ -83,10 +126,19 @@ public class U_GameManager : MonoBehaviour
 
     private void HeadTime(float secs)
     {
+        if (gState != U_GameManager.GameState.Run)
+        {
+            //Debug.Log("ì¸í˜•ë©ˆì¶¤");
+            return;
+        }
+
+        print("HeadTime");
+        
+        //Debug.Log("ì¸í˜•ì›€ì§ì„");
         if (timeValue <= 0)
         {
             headTimeFinish = true;
-            RotHead(180); //ÆÒ´õ ¸Ó¸®µ¹¸®±â
+            RotHead(180);
             return;
         }
 
@@ -97,15 +149,25 @@ public class U_GameManager : MonoBehaviour
 
             if (headTime)
             {
-                dollHeadOn.Play(0);
+                if (!dollHeadOn.isPlaying)
+                {
+                    dollHeadOn.Play();
+                    print("dollHeadOn.Play()");
+                }
+
+                if (!dollSing.isPlaying)
+                {
+                    dollSing.Play();
+                    print("dollSing.Play()");
+                }
             }
             else
             {
-                if (!dollSing.isPlaying)
-                    dollHeadOff.Play(0);
-
-                if (!dollSing.isPlaying)
-                    dollSing.PlayDelayed(1);
+                if (!dollHeadOff.isPlaying)
+                {
+                    dollHeadOff.Play();
+                    print("dollHeadOff.Play()");
+                }
             }
         }
 
@@ -130,3 +192,4 @@ public class U_GameManager : MonoBehaviour
         feetSteps.Stop();
     }
 }
+
